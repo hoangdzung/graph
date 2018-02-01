@@ -73,7 +73,7 @@ def train_model(model, n_epoch):
 			
             # Test phase
             # =======================================================================================
-		total_test_loss = 0.0
+			total_test_loss = 0.0
 			total_test_softmax_loss =0.0
 			total_test_spatials_loss = 0.0
 			total_test_spatial_loss = 0.0
