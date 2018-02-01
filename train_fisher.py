@@ -30,7 +30,7 @@ def train_model(model, n_epoch):
             if step% 500==499:
                 model.learning_rate = model.learning_rate /10
             
-            # Train phase
+            # Train phases
             # =====================================================================================
 			total_train_loss = 0.0
 			total_train_softmax_loss = 0.0
