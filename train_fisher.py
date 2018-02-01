@@ -38,8 +38,8 @@ def train_model(model, n_epoch):
 			total_train_spatial_loss =0.0
 			total_train_temporals_loss=0.0
 			total_train_temporal_loss=0.0
-            train_accuracy = 0.0
-            batch = 1
+			train_accuracy = 0.0
+			batch = 1
 
             for i in range(model.queue.num_batch_train):
                 
