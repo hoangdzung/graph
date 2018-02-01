@@ -54,10 +54,9 @@ def train_model(model, n_epoch):
 									    model.temporal_center_update_op], feed_dict = feed_dict)
                 
                 # Print results after each batch
-                print("{:3d}/{:3d}: acc {:0.5f}, softmax_loss {:3.5f}, intra_spatial {:3.5f}, extra_spatial {3.5f}, \\
-				intra_temporal {:3.5f}, extra_temporal {:3.5f}, total_loss {:5.5f}".format(batch, model.queue.num_batch_train, acc, l, s_l,
+                print("{:3d}/{:3d}: acc {:0.5f}, softmax_loss {:3.5f}, intra_spatial {:3.5f}, extra_spatial {3.5f}, intra_temporal {:3.5f}, extra_temporal {:3.5f}, total_loss {:5.5f}".format(batch, model.queue.num_batch_train, acc, l, s_l,
 													   sps_l, sp_l, ts_l, t_l, total_train_loss),end='\r')
-				step +=1
+		step +=1
 		#if step %3==2: saver.save(sess, file_ckpt+ '/check_points', global_step = model.global_step)
                 batch += 1
                 total_train_loss += l
@@ -65,7 +64,7 @@ def train_model(model, n_epoch):
                 total_train_spatials_loss +=sps_l
                 total_train_spatial_loss += sp_l
                 total_train_temporals_loss+=ts_l
-				total_train_temporal_loss+=t_l
+		total_train_temporal_loss+=t_l
                 train_accuracy += acc
             
             train_accuracy = train_accuracy/model.queue.num_batch_train
@@ -73,7 +72,7 @@ def train_model(model, n_epoch):
             # Test phase
             # =======================================================================================
             total_test_loss = 0.0
-            total_test_softmax_loss =
+            total_test_softmax_loss =0.0
             total_test_spatials_loss = 0.0
             total_test_spatial_loss = 0.0
             total_test_temporals_loss= 0.0
@@ -91,14 +90,13 @@ def train_model(model, n_epoch):
 									    model.accuracy], feed_dict = feed_dict)
                 
                 # Print results after each batch
-                print("{:3d}/{:3d}: acc {:0.5f}, softmax_loss {:3.5f}, intra_spatial {:3.5f}, extra_spatial {3.5f}, \\
-				intra_temporal {:3.5f}, extra_temporal {:3.5f}, total_loss {:5.5f}".format(batch, model.queue.num_batch_test, acc, l, s_l,
+                print("{:3d}/{:3d}: acc {:0.5f}, softmax_loss {:3.5f}, intra_spatial {:3.5f}, extra_spatial {3.5f}, intra_temporal {:3.5f}, extra_temporal {:3.5f}, total_loss {:5.5f}".format(batch, model.queue.num_batch_test, acc, l, s_l,
 													   sps_l, sp_l, ts_l, t_l, total_train_loss),end='\r')
-				step +=1
+		step +=1
 		#if step %3==2: saver.save(sess, file_ckpt+ '/check_points', global_step = model.global_step)
                 batch += 1
                 total_test_loss += l
-				total_test_softmax_loss +=s_l
+		total_test_softmax_loss +=s_l
                 total_test_spatials_loss +=sps_l
                 total_test_spatial_loss += sp_l
                 total_test_temporals_loss+=ts_l
