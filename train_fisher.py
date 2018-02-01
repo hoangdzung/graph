@@ -25,7 +25,7 @@ def train_model(model, n_epoch):
 
         model.writer.add_graph(sess.graph)
         step = sess.run(model.global_step)
-
+        
         for epoch in range(n_epoch):
             if step% 500==499:
                 model.learning_rate = model.learning_rate /10
@@ -42,7 +42,6 @@ def train_model(model, n_epoch):
             batch = 1
 
             for i in range(model.queue.num_batch_train):
-                
                 feed_dict = {model.lr_placeholder:model.learning_rate, model.queue.is_training: 1}
                 
                 l, s_l, sp_l, sps_l, t_l, ts_l, acc, _,_,_,_,_  = sess.run([model.loss, model.softmax_loss,
@@ -62,25 +61,25 @@ def train_model(model, n_epoch):
 		#if step %3==2: saver.save(sess, file_ckpt+ '/check_points', global_step = model.global_step)
                 batch += 1
                 total_train_loss += l
-		total_train_softmax_loss +=s_l
-		total_train_spatials_loss +=sps_l
-		total_train_spatial_loss += sp_l
-		total_train_temporals_loss+=ts_l
-		total_train_temporal_loss+=t_l
+                total_train_softmax_loss +=s_l
+                total_train_spatials_loss +=sps_l
+                total_train_spatial_loss += sp_l
+                total_train_temporals_loss+=ts_l
+				total_train_temporal_loss+=t_l
                 train_accuracy += acc
             
             train_accuracy = train_accuracy/model.queue.num_batch_train
 			
             # Test phase
             # =======================================================================================
-		total_test_loss = 0.0
-		total_test_softmax_loss =0.0
-		total_test_spatials_loss = 0.0
-		total_test_spatial_loss = 0.0
-		total_test_temporals_loss= 0.0
-		total_test_temporal_loss= 0.0
-		test_accuracy = 0.0
-		batch = 1
+            total_test_loss = 0.0
+            total_test_softmax_loss =
+            total_test_spatials_loss = 0.0
+            total_test_spatial_loss = 0.0
+            total_test_temporals_loss= 0.0
+            total_test_temporal_loss= 0.0
+            test_accuracy = 0.0
+            batch = 1
 
             for i in range(model.queue.num_batch_test):
                 
@@ -99,13 +98,12 @@ def train_model(model, n_epoch):
 		#if step %3==2: saver.save(sess, file_ckpt+ '/check_points', global_step = model.global_step)
                 batch += 1
                 total_test_loss += l
-		total_test_softmax_loss +=s_l
-		total_test_spatials_loss +=sps_l
-		total_test_spatial_loss += sp_l
-		total_test_temporals_loss+=ts_l
-		total_test_temporal_loss+=t_l
+				total_test_softmax_loss +=s_l
+                total_test_spatials_loss +=sps_l
+                total_test_spatial_loss += sp_l
+                total_test_temporals_loss+=ts_l
+                total_test_temporal_loss+=t_l
                 test_accuracy += acc
-            
             test_accuracy = test_accuracy/model.queue.num_batch_test
                 
             # Summerize phase
