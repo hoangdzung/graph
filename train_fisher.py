@@ -27,19 +27,19 @@ def train_model(model, n_epoch):
         step = sess.run(model.global_step)
 
         for epoch in range(n_epoch):
-			if step% 500==499:
+            if step% 500==499:
                 model.learning_rate = model.learning_rate /10
             
             # Train phases
             # =====================================================================================
             total_train_loss = 0.0
             total_train_softmax_loss = 0.0
-			total_train_spatials_loss = 0.0
-			total_train_spatial_loss =0.0
-			total_train_temporals_loss=0.0
-			total_train_temporal_loss=0.0
-			train_accuracy = 0.0
-			batch = 1
+            total_train_spatials_loss = 0.0
+            total_train_spatial_loss =0.0
+            total_train_temporals_loss=0.0
+            total_train_temporal_loss=0.0
+            train_accuracy = 0.0
+            batch = 1
 
             for i in range(model.queue.num_batch_train):
                 
@@ -73,8 +73,8 @@ def train_model(model, n_epoch):
 			
             # Test phase
             # =======================================================================================
-            total_test_loss = 0.0
-			total_test_softmax_loss =
+			total_test_loss = 0.0
+			total_test_softmax_loss =0.0
 			total_test_spatials_loss = 0.0
 			total_test_spatial_loss = 0.0
 			total_test_temporals_loss= 0.0
