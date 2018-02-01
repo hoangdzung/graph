@@ -62,18 +62,24 @@ class Multi_stream_model():
             
             self.spatial_center_matrix = tf.gather(self.spatial_centers, self.label)
             self.temporal_center_matrix = tf.gather(self.temporal_centers, self.label)
-
-            self.spatials_loss = tf.nn.l2_loss(self.spatial_center_matrix - self.spatial_cnn.embedding)
-            self.temporals_loss = tf.nn.l2_loss(self.temporal_center_matrix - self.temporal_cnn.embedding)
+            
+            self.spatials_diff = self.spatial_center_matrix - self.spatial_cnn.embedding
+            self.spatials_loss = tf.nn.l2_loss(self.spatials_diff)
+            
+            self.temporals_diff = self.temporal_center_matrix - self.temporal_cnn.embedding
+            self.temporals_loss = tf.nn.l2_loss(self.temporals_diff)
             
             self.spatial_center = tf.get_variable(name="center_spatial", shape=(self.spatial_cnn.n_features,),
                                      initializer = tf.constant_initializer(0.0), trainable = False)
             self.temporal_center = tf.get_variable(name="center_temporal", shape=(self.temporal_cnn.n_features,),
                                      initializer = tf.constant_initializer(0.0), trainable = False)
             
-            self.spatial_loss= tf.nn.l2_loss(self.spatial_center_matrix- self.spatial_center)
-            self.temporal_loss= tf.nn.l2_loss(self.temporal_center_matrix- self.temporal_center)
-
+            self.spatial_diff = self.spatial_center_matrix- self.spatial_center
+            self.spatial_loss= tf.nn.l2_loss(self.spatial_diff)
+            
+            self.temporal_diff = self.temporal_center_matrix- self.temporal_center
+            self.temporal_loss= tf.nn.l2_loss(self.temporal_diff)
+            
             self.spatial_center_loss = tf.maximum(self.spatials_loss - 0.001*self.spatial_loss,0)
             self.temporal_center_loss = tf.maximum(self.temporals_loss - 0.001*self.temporal_loss,0) 
 
@@ -110,10 +116,36 @@ class Multi_stream_model():
         self.test_acc_placeholder = tf.placeholder(dtype = tf.float32, shape =())
         tf.summary.scalar("test_accuracy", self.test_acc_placeholder)
         
-        self.train_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
-        tf.summary.scalar("train_loss", self.train_loss_placeholder)
-
-        self.test_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
-        tf.summary.scalar("test_loss", self.test_loss_placeholder)
+        # Train loss
+        self.train_softmax_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("train_softmax_loss", self.train_softmax_loss_placeholder)
+        
+        self.train_spatials_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("train_spatials_loss", self.train_spatials_loss_placeholder)
+        
+        self.train_spatial_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("train_spatial_loss", self.train_spatial_loss_placeholder)
+        
+        self.train_temporals_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("train_temporals_loss", self.train_temporals_loss_placeholder)
+        
+        self.train_temporal_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("train_temporal_loss", self.train_temporal_loss_placeholder)
+        
+        # Test loss
+        self.test_softmax_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("test_softmax_loss", self.test_softmax_loss_placeholder)
+        
+        self.test_spatials_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("test_spatials_loss", self.test_spatials_loss_placeholder)
+        
+        self.test_spatial_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("test_spatial_loss", self.test_spatial_loss_placeholder)
+        
+        self.test_temporals_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("test_temporals_loss", self.test_temporals_loss_placeholder)
+        
+        self.test_temporal_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("test_temporal_loss", self.test_temporal_loss_placeholder)
 
         self.merged_summary = tf.summary.merge_all()
