@@ -117,6 +117,9 @@ class Multi_stream_model():
         tf.summary.scalar("test_accuracy", self.test_acc_placeholder)
         
         # Train loss
+        self.train_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("train_loss", self.train_loss_placeholder)
+        
         self.train_softmax_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
         tf.summary.scalar("train_softmax_loss", self.train_softmax_loss_placeholder)
         
@@ -133,6 +136,9 @@ class Multi_stream_model():
         tf.summary.scalar("train_temporal_loss", self.train_temporal_loss_placeholder)
         
         # Test loss
+        self.test_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
+        tf.summary.scalar("test_loss", self.test_loss_placeholder)
+        
         self.test_softmax_loss_placeholder = tf.placeholder(dtype = tf.float32, shape = ())
         tf.summary.scalar("test_softmax_loss", self.test_softmax_loss_placeholder)
         
