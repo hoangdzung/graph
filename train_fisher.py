@@ -32,7 +32,12 @@ def train_model(model, n_epoch):
             
             # Train phase
             # =====================================================================================
-            total_train_loss = 0.0
+			total_train_loss = 0.0
+			total_train_softmax_loss = 0.0
+			total_train_spatials_loss = 0.0
+			total_train_spatial_loss =0.0
+			total_train_temporals_loss=0.0
+			total_train_temporal_loss=0.0
             train_accuracy = 0.0
             batch = 1
 
@@ -40,18 +45,28 @@ def train_model(model, n_epoch):
                 
                 feed_dict = {model.lr_placeholder:model.learning_rate, model.queue.is_training: 1}
                 
-                l, acc, _,_,_,_,_  = sess.run([model.loss, model.accuracy, model.optimizer, 
-                                            model.spatial_centers_update_op, 
-                                            model.temporal_centers_update_op,
-                                            model.spatial_center_update_op,
-                                            model.temporal_center_update_op], feed_dict = feed_dict)
+                l, s_l, sp_l, sps_l, t_l, ts_l, acc, _,_,_,_,_  = sess.run([model.loss, model.softmax_loss,
+									    model.spatial_loss, model.spatials_loss,
+									    model.temporal_loss, model.temporals_loss,
+									    model.accuracy, model.optimizer, 
+									    model.spatial_centers_update_op, 
+									    model.temporal_centers_update_op,
+									    model.spatial_center_update_op,
+									    model.temporal_center_update_op], feed_dict = feed_dict)
                 
                 # Print results after each batch
-                print("{:3d}/{:3d}: acc {:0.5f}, loss {:3.5f}, total_loss {:5.5f}".format(batch, model.queue.num_batch_train, acc, l, total_train_loss),end='\r')
-		step +=1
+                print("{:3d}/{:3d}: acc {:0.5f}, softmax_loss {:3.5f}, intra_spatial {:3.5f}, extra_spatial {3.5f}, \\
+				intra_temporal {:3.5f}, extra_temporal {:3.5f}, total_loss {:5.5f}".format(batch, model.queue.num_batch_train, acc, l, s_l,
+													   sps_l, sp_l, ts_l, t_l, total_train_loss),end='\r')
+				step +=1
 		#if step %3==2: saver.save(sess, file_ckpt+ '/check_points', global_step = model.global_step)
                 batch += 1
                 total_train_loss += l
+				total_train_softmax_loss +=s_l
+				total_train_spatials_loss +=sps_l
+				total_train_spatial_loss += sp_l
+				total_train_temporals_loss+=ts_l
+				total_train_temporal_loss+=t_l
                 train_accuracy += acc
             
             train_accuracy = train_accuracy/model.queue.num_batch_train
@@ -59,6 +74,11 @@ def train_model(model, n_epoch):
             # Test phase
             # =======================================================================================
             total_test_loss = 0.0
+			total_test_softmax_loss =
+			total_test_spatials_loss = 0.0
+			total_test_spatial_loss = 0.0
+			total_test_temporals_loss= 0.0
+			total_test_temporal_loss= 0.0
             test_accuracy = 0.0
             batch = 1
 
@@ -66,13 +86,24 @@ def train_model(model, n_epoch):
                 
                 feed_dict = {model.queue.is_training: 0}
                 
-                l, acc  = sess.run([model.loss, model.accuracy], feed_dict = feed_dict)
+                l, s_l, sp_l, sps_l, t_l, ts_l, acc  = sess.run([model.loss, model.softmax_loss,
+									    model.spatial_loss, model.spatials_loss,
+									    model.temporal_loss, model.temporals_loss,
+									    model.accuracy], feed_dict = feed_dict)
                 
                 # Print results after each batch
-                print("{:3d}/{:3d}: acc {:0.5f}, loss {:3.5f}, total_loss {:5.5f}".format(batch, model.queue.num_batch_test, acc, l, total_test_loss),end='\r')
-
+                print("{:3d}/{:3d}: acc {:0.5f}, softmax_loss {:3.5f}, intra_spatial {:3.5f}, extra_spatial {3.5f}, \\
+				intra_temporal {:3.5f}, extra_temporal {:3.5f}, total_loss {:5.5f}".format(batch, model.queue.num_batch_test, acc, l, s_l,
+													   sps_l, sp_l, ts_l, t_l, total_train_loss),end='\r')
+				step +=1
+		#if step %3==2: saver.save(sess, file_ckpt+ '/check_points', global_step = model.global_step)
                 batch += 1
                 total_test_loss += l
+				total_test_softmax_loss +=s_l
+				total_test_spatials_loss +=sps_l
+				total_test_spatial_loss += sp_l
+				total_test_temporals_loss+=ts_l
+				total_test_temporal_loss+=t_l
                 test_accuracy += acc
             
             test_accuracy = test_accuracy/model.queue.num_batch_test
@@ -81,7 +112,20 @@ def train_model(model, n_epoch):
             # =====================================================================================   
             print("Epoch {}: train_loss {}, train_acc {}, test_loss {}, test_acc {}".format(epoch, total_train_loss, train_accuracy, total_test_loss, test_accuracy))
 
-            feed_dict = {model.train_loss_placeholder: total_train_loss, model.test_loss_placeholder: total_test_loss, model.train_acc_placeholder: train_accuracy,model.test_acc_placeholder: test_accuracy}
+            feed_dict = {model.train_loss_placeholder: total_train_loss, 
+						 model.test_loss_placeholder: total_test_loss, 
+						 model.train_softmax_loss_placeholder: total_train_softmax_loss,
+						 model.train_spatials_loss_placeholder: total_train_spatials_loss,
+						 model.train_spatial_loss_placeholder:  total_train_spatial_loss,
+						 model.train_temporals_loss_placeholder: total_train_temporals_loss,
+						 model.train_temporal_loss_placeholder: total_train_temporal_loss,
+						 model.test_softmax_loss_placeholder: total_test_softmax_loss,
+						 model.test_spatials_loss_placeholder: total_test_spatials_loss,
+						 model.test_spatial_loss_placeholder:  total_test_spatial_loss,
+						 model.test_temporals_loss_placeholder: total_test_temporals_loss,
+						 model.test_temporal_loss_placeholder: total_test_temporal_loss,
+						 model.train_acc_placeholder: train_accuracy,
+						 model.test_acc_placeholder: test_accuracy}
             
             summary = sess.run(model.merged_summary, feed_dict = feed_dict)
             model.writer.add_summary(summary, epoch)
