@@ -99,11 +99,11 @@ def train_model(model, n_epoch):
 		#if step %3==2: saver.save(sess, file_ckpt+ '/check_points', global_step = model.global_step)
                 batch += 1
                 total_test_loss += l
-				total_test_softmax_loss +=s_l
-				total_test_spatials_loss +=sps_l
-				total_test_spatial_loss += sp_l
-				total_test_temporals_loss+=ts_l
-				total_test_temporal_loss+=t_l
+		total_test_softmax_loss +=s_l
+		total_test_spatials_loss +=sps_l
+		total_test_spatial_loss += sp_l
+		total_test_temporals_loss+=ts_l
+		total_test_temporal_loss+=t_l
                 test_accuracy += acc
             
             test_accuracy = test_accuracy/model.queue.num_batch_test
